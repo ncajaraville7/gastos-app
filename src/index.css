@@ -56,6 +56,10 @@ header h1 {
     text-transform: uppercase;
 }
 
+.text-aling {
+    text-align: center;
+}
+
 .form {
     width: 95%;
     margin: 0 auto;

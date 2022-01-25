@@ -1,19 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CloseBtn from '../img/cerrar.svg';
 import Message from './message';
 
 
-const Modal = ({ setModal, animateModal, setAnimateModal, saveSpending }) => {
+const Modal = ({ 
+    setModal, 
+    animateModal, 
+    setAnimateModal, 
+    saveSpending, 
+    spendingEdit,
+    setSpendingEdit 
+}) => {
 
     const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
+    const [date, setDate] = useState("");
+    const [id, setId] = useState("");
 
     const [message, setMessage] = useState("");
+
+    
+
+    useEffect( ()=> {
+        if(Object.keys(spendingEdit).length > 0) {
+            setName(spendingEdit.name);
+            setAmount(spendingEdit.amount);
+            setCategory(spendingEdit.category);
+            setId(spendingEdit.id);
+            setDate(spendingEdit.date);
+          }
+    }, [])
 
     const closeModal = () => {
         
         setAnimateModal(false);
+        setSpendingEdit({});
 
         setTimeout(() => {
             setModal(false);
@@ -37,7 +59,7 @@ const Modal = ({ setModal, animateModal, setAnimateModal, saveSpending }) => {
                 setMessage('');
             }, 2500)
         } else {
-            saveSpending({name, amount, category});   
+            saveSpending({name, amount, category, id, date});   
         }
     }
 
@@ -53,7 +75,7 @@ const Modal = ({ setModal, animateModal, setAnimateModal, saveSpending }) => {
         <form 
             className={`form ${animateModal ? "animate" : 'close'}`}
             onSubmit={handleSpending}>
-            <legend>Nuevo Gasto</legend>
+            <legend>{spendingEdit.name ? 'Editar Gasto' : 'Nuevo Gasto'}</legend>
             <div className='input'>
                 <label htmlFor="name">Nombre del gasto</label>
                 <input
@@ -94,7 +116,7 @@ const Modal = ({ setModal, animateModal, setAnimateModal, saveSpending }) => {
 
             <input 
                 type="submit"
-                value="Confimar Gasto"     
+                value={spendingEdit.name ? 'Confirmar cambios' : 'Agregar Gasto'}     
             />
         </form>
 

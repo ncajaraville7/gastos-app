@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Modal from './components/Modal';
 import ListSpending from './components/ListSpending';
 import { generateID } from './helpers/generateID';
 import iconAddSpending from './img/nuevo-gasto.svg';
+import Spending from './components/Spending';
 
 function App() {
 
@@ -15,18 +16,45 @@ function App() {
 
   const [spendings, setSpendings] = useState([]);
 
+  const [spendingEdit, setSpendingEdit] = useState({});
+
+  useEffect( ()=> {
+    //We check that the expense has something to edit it
+    if(Object.keys(spendingEdit).length > 0) {
+      setModal(true);
+
+      setTimeout(() => {
+        setAnimateModal(true);
+      }, 200)
+    }
+  }, [spendingEdit])
+
   const handleNewSpending = () => {
     setModal(true);
+    setSpendingEdit({});
 
     setTimeout(() => {
       setAnimateModal(true);
     }, 200)
   }
 
+  const deleteSpending = id => {
+    const spendingsUpdate = spendings.filter( spending => spending.id !== id)
+    setSpendings(spendingsUpdate);
+  }
+
   const saveSpending = spending => {
+
+    if(spending.id) {
+      const spendingUpdate = spendings.map( spendingState => spendingState.id === spending.id ? spending : spendingState)
+      setSpendings(spendingUpdate);
+      setSpendingEdit({});
+    } else {
       spending.id = generateID();
       spending.date = Date.now();
       setSpendings([...spendings, spending])
+    }
+      
 
       setAnimateModal(false);
       setTimeout( () => {
@@ -49,6 +77,8 @@ function App() {
           <main>
             <ListSpending
               spendings={spendings}
+              setSpendingEdit={setSpendingEdit}
+              deleteSpending={deleteSpending}
             />
           </main>
 
@@ -67,6 +97,8 @@ function App() {
           animateModal={animateModal}
           setAnimateModal={setAnimateModal}
           saveSpending={saveSpending}
+          spendingEdit={spendingEdit}
+          setSpendingEdit={setSpendingEdit}
         />
       )}
       

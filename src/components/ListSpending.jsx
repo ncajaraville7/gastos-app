@@ -1,14 +1,16 @@
 import Spending from "./Spending";
 
-const ListSpending = ({ spendings }) => {
+const ListSpending = ({ spendings, setSpendingEdit, deleteSpending }) => {
   return (
-      <div className="">
-          <h2>{spendings.length ? 'gastos' : 'no hay gastos'}</h2>
+      <div>
+          <h2 className="container text-aling">{spendings.length ? 'GASTOS' : 'NO HAY GASTOS'}</h2>
 
           {spendings.map( spending => (
             <Spending
                 key={spending.id}
                 spending={spending}
+                setSpendingEdit={setSpendingEdit}
+                deleteSpending={deleteSpending}
             />
           ))}
       </div>
