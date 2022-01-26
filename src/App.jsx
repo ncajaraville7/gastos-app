@@ -8,13 +8,17 @@ import Spending from './components/Spending';
 
 function App() {
 
-  const [budget, setBudget] = useState(0);
+  const [budget, setBudget] = useState(
+    Number(localStorage.getItem('budget')) || 0
+  );
   const [isValidBudget, setIsValidBudget] = useState(false);
 
   const [modal, setModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
 
-  const [spendings, setSpendings] = useState([]);
+  const [spendings, setSpendings] = useState(
+    localStorage.getItem('spendings') ? JSON.parse(localStorage.getItem('spendings')) : []
+  );
 
   const [spendingEdit, setSpendingEdit] = useState({});
 
@@ -28,6 +32,26 @@ function App() {
       }, 200)
     }
   }, [spendingEdit])
+
+  useEffect( ()=> {
+    localStorage.setItem('budget', budget || 0)
+  }, [budget])
+
+  useEffect( () => {
+    localStorage.setItem('spendings', JSON.stringify(spendings) || [])
+  }, [spendings])
+
+  useEffect( ()=> {
+    const budgetLocalStorage = Number(localStorage.getItem('budget')) || 0;
+
+    if(budgetLocalStorage > 0) {
+      setIsValidBudget(true)
+    }
+  }, [])
+
+  // useEffect( ()=> {
+  //   const spendingLocalStorage = JSON.parse(localStorage.getItem('spending', spendings)) || []
+  // }, [])
 
   const handleNewSpending = () => {
     setModal(true);
