@@ -60,10 +60,6 @@ function App() {
     }
   }, [])
 
-  // useEffect( ()=> {
-  //   const spendingLocalStorage = JSON.parse(localStorage.getItem('spending', spendings)) || []
-  // }, [])
-
   const handleNewSpending = () => {
     setModal(true);
     setSpendingEdit({});
@@ -90,7 +86,6 @@ function App() {
       setSpendings([...spendings, spending])
     }
       
-
       setAnimateModal(false);
       setTimeout( () => {
         setModal(false)

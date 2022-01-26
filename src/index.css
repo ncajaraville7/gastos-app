@@ -433,3 +433,10 @@ body .modal {
     font-size: 2.4rem;
     text-align: right;
 }
+
+@media (max-width: 595px) {
+    .container-budget,
+    form.input {
+        flex-direction: column;
+    }
+}
