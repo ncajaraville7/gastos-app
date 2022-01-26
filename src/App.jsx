@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Modal from './components/Modal';
+import Filters from './components/Filters';
 import ListSpending from './components/ListSpending';
 import { generateID } from './helpers/generateID';
 import iconAddSpending from './img/nuevo-gasto.svg';
@@ -22,6 +23,9 @@ function App() {
 
   const [spendingEdit, setSpendingEdit] = useState({});
 
+  const [filter, setFilter] = useState("");
+  const [filteredSpending, setFilteredSpending] = useState([]);
+
   useEffect( ()=> {
     //We check that the expense has something to edit it
     if(Object.keys(spendingEdit).length > 0) {
@@ -32,6 +36,13 @@ function App() {
       }, 200)
     }
   }, [spendingEdit])
+
+  useEffect( () => {
+    if(filter) {
+      const spendingFilter = spendings.filter( spending => spending.category === filter)
+      setFilteredSpending(spendingFilter);
+    }
+  }, [filter])
 
   useEffect( ()=> {
     localStorage.setItem('budget', budget || 0)
@@ -94,15 +105,23 @@ function App() {
         isValidBudget={isValidBudget}
         setIsValidBudget={setIsValidBudget}
         spendings={spendings}
+        setSpendings={setSpendings}
       />
 
       {isValidBudget && (
         <>
           <main>
+            <Filters
+              filter={filter}
+              setFilter={setFilter}
+            />
             <ListSpending
               spendings={spendings}
               setSpendingEdit={setSpendingEdit}
               deleteSpending={deleteSpending}
+              filter={filter}
+              filteredSpending={filteredSpending}
+
             />
           </main>
 
